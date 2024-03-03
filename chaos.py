@@ -52,7 +52,7 @@ optimizer_object1 = torch.optim.Adam(model_object1.parameters(), lr=0.001)
 optimizer_object2 = torch.optim.Adam(model_object2.parameters(), lr=0.001)
 
 # Training loop
-num_epochs = 500
+num_epochs = 1000
 batch_size = 128
 trn_losses_object1 = []
 trn_losses_object2 = []
