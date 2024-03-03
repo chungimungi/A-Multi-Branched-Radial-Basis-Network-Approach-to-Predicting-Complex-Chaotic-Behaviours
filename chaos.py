@@ -52,7 +52,7 @@ optimizer_object1 = torch.optim.Adam(model_object1.parameters(), lr=0.001)
 optimizer_object2 = torch.optim.Adam(model_object2.parameters(), lr=0.001)
 
 # Training loop
-num_epochs = 100
+num_epochs = 500
 batch_size = 128
 trn_losses_object1 = []
 trn_losses_object2 = []
@@ -118,58 +118,55 @@ with torch.no_grad():
 predicted_positions_object1 = torch.cat(predicted_positions_object1, dim=0).cpu().numpy()
 predicted_positions_object2 = torch.cat(predicted_positions_object2, dim=0).cpu().numpy()
 
-import turtle
+import matplotlib.pyplot as plt
+import numpy as np
+import imageio
 
-# Initialize Turtle screen
-screen = turtle.Screen()
-screen.setup(width=800, height=600)
-screen.title('Object Movement')
+# Function to plot positions and save as image
+import matplotlib.pyplot as plt
+import numpy as np
+import imageio
 
-# Draw the dataset movements
-object1_turtle = turtle.Turtle()
-object1_turtle.color('blue')
-object1_turtle.penup()
-object1_turtle.speed(0)
+# Function to plot positions and save as image
+def plot_positions(object1_positions, object2_positions, filename, predicted_object1=None, predicted_object2=None, predicted_color='green'):
+    plt.figure(figsize=(40, 40))
+    plt.plot(object1_positions[:, 0], object1_positions[:, 1], label='Object 1 (Data)', color='blue')
+    plt.plot(object2_positions[:, 0], object2_positions[:, 1], label='Object 2 (Data)', color='red')
+    if predicted_object1 is not None:
+        plt.plot(predicted_object1[:, 0], predicted_object1[:, 1], label='Object 1 (Predicted)', color=predicted_color)
+    if predicted_object2 is not None:
+        plt.plot(predicted_object2[:, 0], predicted_object2[:, 1], label='Object 2 (Predicted)', color=predicted_color)
+    plt.xlabel('X Position')
+    plt.ylabel('Y Position')
+    plt.title('Object Movement')
+    plt.legend()
+    plt.savefig(filename)
+    plt.close()
 
-object2_turtle = turtle.Turtle()
-object2_turtle.color('red')
-object2_turtle.penup()
-object2_turtle.speed(0)
+# Generate predicted positions (assuming you have them)
+# predicted_positions_object1 and predicted_positions_object2 should be numpy arrays of shape (num_steps, 3) with columns [angle, posx, posy]
+# You should fill these with your actual predicted positions
+predicted_positions_object1 = np.random.rand(100, 3)
+predicted_positions_object2 = np.random.rand(100, 3)
 
-# Draw the dataset movements
-for point1, point2 in zip(y_object1, y_object2):
-    object1_turtle.goto(point1[1], point1[2])
-    object2_turtle.goto(point2[1], point2[2])
+# Plot and save each frame
+image_filenames = []
+for i in range(len(predicted_positions_object1)):
+    plot_positions(y_object1[:, 1:], y_object2[:, 1:], f'frame_{i:03d}.png',
+                    predicted_object1=predicted_positions_object1[:i+1, 1:], predicted_object2=predicted_positions_object2[:i+1, 1:],
+                    predicted_color='green')
+    image_filenames.append(f'frame_{i:03d}.png')
 
-# Draw the predicted path combined with the dataset movements
-combined_object1_turtle = turtle.Turtle()
-combined_object1_turtle.color('green')
-combined_object1_turtle.penup()
-combined_object1_turtle.speed(0)
+# Compile frames into GIF
+with imageio.get_writer('object_movement.gif', mode='I') as writer:
+    for filename in image_filenames:
+        image = imageio.imread(filename)
+        writer.append_data(image)
 
-combined_object2_turtle = turtle.Turtle()
-combined_object2_turtle.color('purple')
-combined_object2_turtle.penup()
-combined_object2_turtle.speed(0)
+# Clean up image files
+import os
+for filename in image_filenames:
+    os.remove(filename)
 
-# Start from the last known point of the dataset
-last_dataset_point1 = y_object1[-1][1:]
-last_dataset_point2 = y_object2[-1][1:]
 
-# Draw the predicted path starting from the last known dataset point
-for predicted_point1, predicted_point2 in zip(predicted_positions_object1, predicted_positions_object2):
-    combined_object1_turtle.goto(last_dataset_point1[0], last_dataset_point1[1])
-    combined_object1_turtle.pendown()
-    combined_object1_turtle.goto(predicted_point1[1], predicted_point1[2])
-    combined_object1_turtle.penup()
-    last_dataset_point1 = (predicted_point1[1], predicted_point1[2])
-    
-    combined_object2_turtle.goto(last_dataset_point2[0], last_dataset_point2[1])
-    combined_object2_turtle.pendown()
-    combined_object2_turtle.goto(predicted_point2[1], predicted_point2[2])
-    combined_object2_turtle.penup()
-    last_dataset_point2 = (predicted_point2[1], predicted_point2[2])
-
-# Keep the window open
-screen.mainloop()
 
