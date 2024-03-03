@@ -118,10 +118,6 @@ with torch.no_grad():
 predicted_positions_object1 = torch.cat(predicted_positions_object1, dim=0).cpu().numpy()
 predicted_positions_object2 = torch.cat(predicted_positions_object2, dim=0).cpu().numpy()
 
-import matplotlib.pyplot as plt
-import numpy as np
-import imageio
-
 # Function to plot positions and save as image
 import matplotlib.pyplot as plt
 import numpy as np
