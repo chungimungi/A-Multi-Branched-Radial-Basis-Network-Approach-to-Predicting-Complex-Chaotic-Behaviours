@@ -14,10 +14,6 @@ torch.set_default_device('cuda')
 # Load the dataset
 data = pd.read_csv("aarush/RBF/data/data.csv")
 
-# Normalize coordinates to fit in a 40x40 plot
-data[['pos1x', 'pos1y', 'pos2x', 'pos2y']] /= data[['pos1x', 'pos1y', 'pos2x', 'pos2y']].max().max()
-data[['pos1x', 'pos1y', 'pos2x', 'pos2y']] *= 40
-
 # Prepare data
 y_object1 = data[['angle1','pos1x', 'pos1y']].values
 y_object2 = data[['angle2','pos2x', 'pos2y']].values
