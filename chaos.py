@@ -3,15 +3,20 @@ from rbf_layer.rbf_layer import RBFLayer
 from rbf_layer.rbf_utils import rbf_inverse_multiquadric
 import torch.nn as nn
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
 from tqdm import tqdm
+import numpy as np
+from matplotlib.animation import FuncAnimation
 
 # Define device
 torch.set_default_device('cuda')
 
 # Load the dataset
 data = pd.read_csv("aarush/RBF/data/data.csv")
+
+# Normalize coordinates to fit in a 40x40 plot
+data[['pos1x', 'pos1y', 'pos2x', 'pos2y']] /= data[['pos1x', 'pos1y', 'pos2x', 'pos2y']].max().max()
+data[['pos1x', 'pos1y', 'pos2x', 'pos2y']] *= 40
 
 # Prepare data
 y_object1 = data[['angle1','pos1x', 'pos1y']].values
@@ -35,10 +40,12 @@ class RBF(nn.Module):
                             radial_function=rbf_inverse_multiquadric,
                             norm_function=euclidean_norm,
                             normalization=True)
+        self.dropout = nn.Dropout(0.2)
         self.output_layer = nn.Linear(3, 3)
 
     def forward(self, x):
         x = self.rbf(x)
+        x = self.dropout(x)
         x = self.output_layer(x)
         return x
 
@@ -52,7 +59,7 @@ optimizer_object1 = torch.optim.Adam(model_object1.parameters(), lr=0.001)
 optimizer_object2 = torch.optim.Adam(model_object2.parameters(), lr=0.001)
 
 # Training loop
-num_epochs = 1000
+num_epochs = 400
 batch_size = 128
 trn_losses_object1 = []
 trn_losses_object2 = []
@@ -97,11 +104,11 @@ input_object2 = y_object2_tensor[-1].unsqueeze(0)  # Last known position of obje
 predicted_positions_object1 = []
 predicted_positions_object2 = []
 
-model_object1.eval()  # Set model to evaluation mode
-model_object2.eval()  # Set model to evaluation mode
+model_object1.eval() 
+model_object2.eval() 
 
 with torch.no_grad():
-    for _ in tqdm(range(100), desc='Predicting', unit='step'):
+    for _ in tqdm(range(15000), desc='Predicting', unit='step'):
         # Predict next position for object1
         next_position_object1 = model_object1(input_object1)
         predicted_positions_object1.append(next_position_object1)
@@ -118,51 +125,23 @@ with torch.no_grad():
 predicted_positions_object1 = torch.cat(predicted_positions_object1, dim=0).cpu().numpy()
 predicted_positions_object2 = torch.cat(predicted_positions_object2, dim=0).cpu().numpy()
 
-# Function to plot positions and save as image
-import matplotlib.pyplot as plt
-import numpy as np
-import imageio
+# Create animation
+fig, ax = plt.subplots(figsize=(40, 40))
 
-# Function to plot positions and save as image
-def plot_positions(object1_positions, object2_positions, filename, predicted_object1=None, predicted_object2=None, predicted_color='green'):
-    plt.figure(figsize=(40, 40))
-    plt.plot(object1_positions[:, 0], object1_positions[:, 1], label='Object 1 (Data)', color='blue')
-    plt.plot(object2_positions[:, 0], object2_positions[:, 1], label='Object 2 (Data)', color='red')
-    if predicted_object1 is not None:
-        plt.plot(predicted_object1[:, 0], predicted_object1[:, 1], label='Object 1 (Predicted)', color=predicted_color)
-    if predicted_object2 is not None:
-        plt.plot(predicted_object2[:, 0], predicted_object2[:, 1], label='Object 2 (Predicted)', color=predicted_color)
-    plt.xlabel('X Position')
-    plt.ylabel('Y Position')
-    plt.title('Object Movement')
-    plt.legend()
-    plt.savefig(filename)
-    plt.close()
+def update(frame):
+    ax.clear()
+    ax.plot(y_object1[:frame, 1], y_object1[:frame, 2], label='Object 1 (Data)', color='blue', marker='o')
+    ax.plot(y_object2[:frame, 1], y_object2[:frame, 2], label='Object 2 (Data)', color='red', marker='o')
+    ax.plot(predicted_positions_object1[:frame, 1], predicted_positions_object1[:frame, 2], label='Object 1 (Predicted)', color='black', linestyle='dotted')
+    ax.plot(predicted_positions_object2[:frame, 1], predicted_positions_object2[:frame, 2], label='Object 2 (Predicted)', color='green', linestyle='dotted')
+    ax.set_xlabel('X Position')
+    ax.set_ylabel('Y Position')
+    ax.set_title('Object Movement')
+    ax.legend()
+    ax.set_xlim(0, 40)
+    ax.set_ylim(0, 40)
 
-# Generate predicted positions (assuming you have them)
-# predicted_positions_object1 and predicted_positions_object2 should be numpy arrays of shape (num_steps, 3) with columns [angle, posx, posy]
-# You should fill these with your actual predicted positions
-predicted_positions_object1 = np.random.rand(100, 3)
-predicted_positions_object2 = np.random.rand(100, 3)
+ani = FuncAnimation(fig, update, frames=len(predicted_positions_object1), interval=50)
 
-# Plot and save each frame
-image_filenames = []
-for i in range(len(predicted_positions_object1)):
-    plot_positions(y_object1[:, 1:], y_object2[:, 1:], f'frame_{i:03d}.png',
-                    predicted_object1=predicted_positions_object1[:i+1, 1:], predicted_object2=predicted_positions_object2[:i+1, 1:],
-                    predicted_color='green')
-    image_filenames.append(f'frame_{i:03d}.png')
-
-# Compile frames into GIF
-with imageio.get_writer('object_movement.gif', mode='I') as writer:
-    for filename in image_filenames:
-        image = imageio.imread(filename)
-        writer.append_data(image)
-
-# Clean up image files
-import os
-for filename in image_filenames:
-    os.remove(filename)
-
-
-
+# Save animation as file
+ani.save('object_movement.gif', writer='pillow')
