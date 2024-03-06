@@ -28,12 +28,12 @@ where *r* is the distance between the input point and the center, and *σ* is a 
 
 where *r* is the distance between the input point and the center.
 
-### **In the case for this project Inverse Multiquadric RBF is used**
 
-## Training Parameters
+## Using Inverse Multiquadric RBF
+### Training Parameters
 - epochs = 1500
 - batch_size = 128
-- Prediction Steps = 100 & 1500
+- Prediction Steps = 100
 
   **Training Loss Graph**
 
