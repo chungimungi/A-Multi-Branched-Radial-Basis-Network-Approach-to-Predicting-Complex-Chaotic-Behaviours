@@ -39,6 +39,13 @@ where *r* is the distance between the input point and the center.
 
   ![training_loss_graph](https://github.com/chungimungi/Attractor-Chaos/assets/90822297/1215fbf4-a076-49df-b818-47fbb8e09f30)
 
-**Predicted Movements**
+
+## Using Gaussian RBF
+### Training Parameters
+- epochs = 1500
+- batch_size = 128
+- Prediction Steps = 100
+
+  **Training Loss Graph**
 
 
