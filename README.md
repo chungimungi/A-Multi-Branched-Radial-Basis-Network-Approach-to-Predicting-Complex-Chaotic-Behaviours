@@ -33,7 +33,7 @@ where *r* is the distance between the input point and the center.
 ## Training Parameters
 - epochs = 1500
 - batch_size = 128
-- Prediction Steps = 1500
+- Prediction Steps = 100 & 1500
 
   **Training Loss Graph**
 
