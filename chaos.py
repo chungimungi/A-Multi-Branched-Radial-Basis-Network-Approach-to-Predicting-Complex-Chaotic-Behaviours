@@ -8,7 +8,9 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 import imageio
 import os
+import matplotlib as mpl
 
+mpl.rcParams['agg.path.chunksize'] = 10000
 # Define device
 torch.set_default_device('cuda')
 
