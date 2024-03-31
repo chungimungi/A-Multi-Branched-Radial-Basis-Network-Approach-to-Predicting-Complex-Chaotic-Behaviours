@@ -29,11 +29,14 @@ where *r* is the distance between the input point and the center, and *σ* is a 
 where *r* is the distance between the input point and the center.
 
 
-## Using Gaussian RBF
+## Inverse Multiquadratic
 ### Training Parameters
 - epochs = 2000
 - batch_size = 512
 - Prediction Steps = 100
 
+## Results
+
+[GIFs](https://drive.google.com/drive/folders/1l-uGRRqru-eUcQGWe73-svW-konhBoBa?usp=sharing)
 
 
