@@ -31,8 +31,8 @@ where *r* is the distance between the input point and the center.
 
 ## Using Gaussian RBF
 ### Training Parameters
-- epochs = 1500
-- batch_size = 128
+- epochs = 2000
+- batch_size = 512
 - Prediction Steps = 100
 
 
