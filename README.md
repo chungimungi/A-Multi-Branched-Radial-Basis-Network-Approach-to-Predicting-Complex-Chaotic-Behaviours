@@ -29,8 +29,8 @@ where *r* is the distance between the input point and the center, and *σ* is a 
 where *r* is the distance between the input point and the center.
 
 
-## Inverse Multiquadratic
-### Training Parameters
+### Trained using Inverse Multiquadratic
+#### Training Parameters
 - epochs = 2000
 - batch_size = 512
 - Prediction Steps = 100
