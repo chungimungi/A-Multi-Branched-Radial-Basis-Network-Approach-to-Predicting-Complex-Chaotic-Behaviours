@@ -41,4 +41,17 @@ where *r* is the distance between the input point and the center.
 
 [GIFs](https://drive.google.com/drive/folders/1l-uGRRqru-eUcQGWe73-svW-konhBoBa?usp=sharing)
 
+**Consider citing this work if you find it useful**
+
+```
+@misc{sinha2024multibranched,
+      title={A Multi-Branched Radial Basis Network Approach to Predicting Complex Chaotic Behaviours}, 
+      author={Aarush Sinha},
+      year={2024},
+      eprint={2404.00618},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG}
+}
+```
+
 
