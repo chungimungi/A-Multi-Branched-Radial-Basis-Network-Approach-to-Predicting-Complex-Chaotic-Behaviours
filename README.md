@@ -1,3 +1,5 @@
+[![arXiv](https://img.shields.io/badge/arXiv-1234.56789-b31b1b.svg)](https://arxiv.org/abs/2404.00618)
+
 # Attractor-Chaos
 Predicting complex chaotic behaviors using Radial Basis Function Neural Networks 
 
