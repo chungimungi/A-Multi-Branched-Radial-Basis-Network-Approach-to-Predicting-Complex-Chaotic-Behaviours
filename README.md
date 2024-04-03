@@ -1,6 +1,6 @@
 [![arXiv](https://img.shields.io/badge/arXiv-1234.56789-b31b1b.svg)](https://arxiv.org/abs/2404.00618)
 
-# Attractor-Chaos
+# A Multi-Branched Radial Basis Network Approach to Predicting Complex Chaotic Behaviours
 Predicting complex chaotic behaviors using Radial Basis Function Neural Networks 
 
 Built on the work of [rssalessio](https://github.com/rssalessio/PytorchRBFLayer)
@@ -29,6 +29,10 @@ where *r* is the distance between the input point and the center, and *σ* is a 
 φ(r) = r^2 * log(r)
 
 where *r* is the distance between the input point and the center.
+
+## Proposed Model Architecture 
+
+![rbfmulti](https://github.com/chungimungi/A-Multi-Branched-Radial-Basis-Network-Approach-to-Predicting-Complex-Chaotic-Behaviours/assets/90822297/14590960-a8ca-4712-8b22-f54e958dfa8e)
 
 
 ### Trained using Inverse Multiquadratic
