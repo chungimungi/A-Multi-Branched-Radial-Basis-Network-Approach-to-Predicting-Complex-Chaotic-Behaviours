@@ -1,9 +1,9 @@
-[![arXiv](https://img.shields.io/badge/arXiv-1234.56789-b31b1b.svg)](https://arxiv.org/abs/2404.00618)
+
 
 # A Multi-Branched Radial Basis Network Approach to Predicting Complex Chaotic Behaviours
 Predicting complex chaotic behaviors using Radial Basis Function Neural Networks 
 
-Built on the work of [rssalessio](https://github.com/rssalessio/PytorchRBFLayer)
+
 
 
 Radial Basis Functions (RBFs) are a class of mathematical functions widely used in various fields, including machine learning and computational mathematics. These functions are defined based on the distance or similarity between a point and a center, often in a multidimensional space.
@@ -47,15 +47,5 @@ where *r* is the distance between the input point and the center.
 
 **Consider citing this work if you find it useful**
 
-```
-@misc{sinha2024multibranched,
-      title={A Multi-Branched Radial Basis Network Approach to Predicting Complex Chaotic Behaviours}, 
-      author={Aarush Sinha},
-      year={2024},
-      eprint={2404.00618},
-      archivePrefix={arXiv},
-      primaryClass={cs.LG}
-}
-```
 
 
